@@ -11,17 +11,19 @@ export default function DeleteStudentPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Telefon raqamni formatlash funksiyasi
+  // Telefon raqamni +XXX (XX) XXX-XX-XX formatiga o'zgartiruvchi funksiya
   const formatPhoneNumber = (value: string) => {
-    const onlyNums = value.replace(/\D/g, ""); // Raqamlardan boshqa belgilarni olib tashlash
+    const onlyNums = value.replace(/\D/g, ""); // Faqat raqamlarni ajratib olish
     if (onlyNums.length <= 3) {
-      return `+(${onlyNums})`;
-    } else if (onlyNums.length <= 6) {
-      return `+(${onlyNums.slice(0, 3)}) ${onlyNums.slice(3)}`;
+      return `+${onlyNums}`;
+    } else if (onlyNums.length <= 5) {
+      return `+${onlyNums.slice(0, 3)} (${onlyNums.slice(3)}`;
     } else if (onlyNums.length <= 8) {
-      return `+(${onlyNums.slice(0, 3)}) ${onlyNums.slice(3, 6)}-${onlyNums.slice(6)}`;
+      return `+${onlyNums.slice(0, 3)} (${onlyNums.slice(3, 5)}) ${onlyNums.slice(5)}`;
+    } else if (onlyNums.length <= 10) {
+      return `+${onlyNums.slice(0, 3)} (${onlyNums.slice(3, 5)}) ${onlyNums.slice(5, 8)}-${onlyNums.slice(8)}`;
     } else {
-      return `+(${onlyNums.slice(0, 3)}) ${onlyNums.slice(3, 6)}-${onlyNums.slice(6, 8)}-${onlyNums.slice(8, 10)}`;
+      return `+${onlyNums.slice(0, 3)} (${onlyNums.slice(3, 5)}) ${onlyNums.slice(5, 8)}-${onlyNums.slice(8, 10)}-${onlyNums.slice(10, 12)}`;
     }
   };
 
@@ -31,7 +33,7 @@ export default function DeleteStudentPage() {
   };
 
   const handleSendCode = async () => {
-    const rawPhoneNumber = phoneNumber.replace(/\D/g, ""); // Faqat raqamlar
+    const rawPhoneNumber = phoneNumber.replace(/\D/g, ""); // Faqat raqamlarni API uchun olish
 
     const success = await sendDeleteCode(rawPhoneNumber);
 
@@ -48,7 +50,7 @@ export default function DeleteStudentPage() {
   };
 
   const handleDelete = async (smsCode: string) => {
-    const rawPhoneNumber = phoneNumber.replace(/\D/g, ""); // Faqat raqamlar
+    const rawPhoneNumber = phoneNumber.replace(/\D/g, ""); // Faqat raqamlarni API uchun olish
 
     const success = await deleteStudent(rawPhoneNumber, smsCode);
     if (success) {
