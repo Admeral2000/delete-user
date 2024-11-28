@@ -1,8 +1,9 @@
 // lib/api.ts
+const URL = process.env.NEXT_PUBLIC_GLOBAL_API_URL;
 
 export async function sendDeleteCode(phoneNumber: string): Promise<boolean> {
   try {
-    const response = await fetch(`/api/students/delete/${phoneNumber}`, { method: 'POST' });
+    const response = await fetch(`${URL}/students/delete/${phoneNumber}`, { method: 'POST' });
     return response.ok;
   } catch {
     return false;
@@ -11,7 +12,7 @@ export async function sendDeleteCode(phoneNumber: string): Promise<boolean> {
 
 export async function deleteStudent(phoneNumber: string, code: string): Promise<boolean> {
   try {
-    const response = await fetch(`/api/students/delete/${phoneNumber}`, {
+    const response = await fetch(`${URL}/students/delete/${phoneNumber}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code }),
